@@ -1,6 +1,7 @@
 #!/bin/bash
 
-NETWORK=pythonwebapp_backend
-NGINX_CONFIG=pythonwebapp_nginx_config
-INTERLOCK=pythonwebapp_interlock
-INTERLOCK_IMAGE=pythonwebapp_interlaken
+APP=interlockexample
+NETWORK=${APP}_backend
+LB_CONFIG=${APP}_lb_config
+INTERLOCK=${APP}_interlock
+INTERLOCK_IMAGE=${APP}_interlaken

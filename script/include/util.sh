@@ -36,16 +36,16 @@ image_exists() {
   return $EXIT_CODE
 }
 
-output_nginx_config() {
+output_lb_config() {
   docker run --rm \
-    --volumes-from ${NGINX_CONFIG} \
+    --volumes-from ${LB_CONFIG} \
     cirros \
     cat /etc/conf/nginx.conf
 }
 
-remove_nginx_config() {
+remove_lb_config() {
   docker run --rm \
-    --volumes-from ${NGINX_CONFIG} \
+    --volumes-from ${LB_CONFIG} \
     cirros \
     rm /etc/conf/nginx.conf
 }

@@ -3,7 +3,7 @@ version: "2"
 services:
   # load balancer
   lb:
-    container_name: pythonwebapp_lb
+    container_name: interlockexample_lb
     image: nginx:1.9
     entrypoint: nginx
     command: -g "daemon off;" -c /etc/conf/nginx.conf
@@ -15,7 +15,7 @@ services:
     labels:
       - "interlock.ext.name=nginx"
     volumes_from:
-      - container:pythonwebapp_nginx_config:ro
+      - container:interlockexample_lb_config:ro
     environment:
       - constraint:node==*n1
 
@@ -28,8 +28,7 @@ services:
     expose:
       - 8080
     labels:
-        - "interlock.hostname=test"
-        - "interlock.domain=local"
+        - "interlock.domain=test"
 
 networks:
   backend: {}
