@@ -1,0 +1,14 @@
+ListenAddr = ":8080"
+DockerURL = "DOCKER_HOST"
+TLSCACert = "/etc/docker/ca.pem"
+TLSCert = "/etc/docker/server-cert.pem"
+TLSKey = "/etc/docker/server-key.pem"
+AllowInsecure = false
+EnableMetrics = true
+
+[[extensions]]
+name = "nginx"
+configPath = "/etc/conf/nginx.conf"
+pidPath = "/etc/conf/nginx.pid"
+maxConn = 1024
+port = 80
