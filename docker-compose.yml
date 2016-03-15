@@ -6,29 +6,28 @@ services:
     container_name: interlockexample_lb
     image: nginx:1.9
     entrypoint: nginx
-    command: -g "daemon off;" -c /etc/conf/nginx.conf
-    restart: unless-stopped
+    command: -g "daemon off;" -c /etc/nginx/nginx.conf
+    restart: always
     networks:
       - backend
     ports:
       - "80:80"
     labels:
       - "interlock.ext.name=nginx"
-    volumes_from:
-      - container:interlockexample_lb_config:ro
     environment:
       - constraint:node==*n1
 
   # app
   app:
-    image: ehazlett/docker-demo:latest
+    image: ehazlett/docker-demo
     restart: unless-stopped
     networks:
       - backend
-    expose:
+    ports:
       - 8080
     labels:
-        - "interlock.domain=test"
+        - "interlock.hostname=test"
+        - "interlock.domain=local"
 
 networks:
   backend: {}

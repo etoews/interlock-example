@@ -1,3 +1,3 @@
-FROM ehazlett/interlock:1.0
+FROM ehazlett/interlock:overlay
 
 COPY config.toml /bin/config.toml

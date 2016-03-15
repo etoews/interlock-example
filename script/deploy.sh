@@ -21,15 +21,6 @@ if ! network_exists ${NETWORK} ; then
   docker network create ${NETWORK}
 fi
 
-if ! container_exists ${LB_CONFIG} ; then
-  echo "Create container ${LB_CONFIG}"
-  docker create \
-    --name ${LB_CONFIG} \
-    --volume /etc/conf \
-    --env constraint:node==*-n1 \
-    cirros
-fi
-
 if ! container_exists ${INTERLOCK} ; then
   echo "Run container ${INTERLOCK}"
   docker run -it \
@@ -38,7 +29,6 @@ if ! container_exists ${INTERLOCK} ; then
     --publish 8080:8080 \
     --restart unless-stopped \
     --volumes-from swarm-data:ro \
-    --volumes-from ${LB_CONFIG} \
     --env constraint:node==*-n1 \
     ${INTERLOCK_IMAGE} \
     -D run

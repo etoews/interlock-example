@@ -2,6 +2,6 @@
 
 APP=interlockexample
 NETWORK=${APP}_backend
-LB_CONFIG=${APP}_lb_config
+LB=${APP}_lb
 INTERLOCK=${APP}_interlock
 INTERLOCK_IMAGE=${APP}_interlaken

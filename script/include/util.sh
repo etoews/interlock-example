@@ -37,15 +37,13 @@ image_exists() {
 }
 
 output_lb_config() {
-  docker run --rm \
-    --volumes-from ${LB_CONFIG} \
-    cirros \
-    cat /etc/conf/nginx.conf
+  docker exec \
+    ${LB} \
+    cat /etc/nginx/nginx.conf
 }
 
 remove_lb_config() {
-  docker run --rm \
-    --volumes-from ${LB_CONFIG} \
-    cirros \
-    rm /etc/conf/nginx.conf
+  docker exec \
+    ${LB}
+    rm /etc/nginx/nginx.conf
 }
