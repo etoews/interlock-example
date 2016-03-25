@@ -5,9 +5,7 @@ services:
   lb:
     container_name: interlockexample_lb
     image: nginx:1.9
-    entrypoint: nginx
-    command: -g "daemon off;" -c /etc/nginx/nginx.conf
-    restart: always
+    restart: unless-stopped
     networks:
       - backend
     ports:
@@ -23,11 +21,14 @@ services:
     restart: unless-stopped
     networks:
       - backend
-    ports:
+    expose:
       - 8080
     labels:
-        - "interlock.hostname=test"
-        - "interlock.domain=local"
+      - "interlock.network=interlockexample_backend"
+      - "interlock.hostname=test"
+      - "interlock.domain=local"
+    depends_on:
+      - lb
 
 networks:
   backend: {}

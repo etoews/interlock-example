@@ -4,12 +4,13 @@ Terminal 1
 
 ```bash
 script/deploy.sh
+docker logs -f interlockexample_interlock
 ```
 
 Terminal 2
 
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
 Note the errors.

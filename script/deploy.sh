@@ -26,10 +26,9 @@ if ! container_exists ${INTERLOCK} ; then
   docker run -it \
     --name ${INTERLOCK} \
     --net ${NETWORK} \
-    --publish 8080:8080 \
     --restart unless-stopped \
     --volumes-from swarm-data:ro \
-    --env constraint:node==*-n1 \
+    --env constraint:node==*n1 \
     ${INTERLOCK_IMAGE} \
-    -D run
+    -D run --config /etc/interlock/config.toml
 fi

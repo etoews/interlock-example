@@ -1,3 +1,6 @@
-FROM ehazlett/interlock:overlay
+FROM etoews/interlock:templates
 
-COPY config.toml /bin/config.toml
+RUN mkdir /etc/interlock
+
+COPY config.toml /etc/interlock/config.toml
+COPY nginx.conf.template /etc/interlock/nginx.conf.template
