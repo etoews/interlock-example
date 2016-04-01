@@ -9,26 +9,34 @@ source ${ROOT}/script/include/util.sh
 
 # TODO check for DOCKER_HOST and link to create connect cluster or virtualbox
 
-echo "Build image ${INTERLOCK_IMAGE}"
-sed s#DOCKER_HOST#${DOCKER_HOST}#g interlock/config.tmpl > interlock/config.toml
-docker build \
-  --build-arg constraint:node==*n1 \
-  --tag ${INTERLOCK_IMAGE} \
-  interlock/
+for (( i=1; i<=2; i++ )); do
+  echo "Build image ${INTERLOCK_IMAGE}${i}"
 
-if ! network_exists ${NETWORK} ; then
-  echo "Create network ${NETWORK}"
-  docker network create ${NETWORK}
-fi
+  sed s#DOCKER_HOST#${DOCKER_HOST}#g interlock/config.tmpl > interlock/config.tmpl2
+  sed s#SERVICE_NAME#service${i}#g interlock/config.tmpl2 > interlock/config.toml
 
-if ! container_exists ${INTERLOCK} ; then
-  echo "Run container ${INTERLOCK}"
-  docker run -it \
-    --name ${INTERLOCK} \
-    --net ${NETWORK} \
-    --restart unless-stopped \
-    --volumes-from swarm-data:ro \
-    --env constraint:node==*n1 \
-    ${INTERLOCK_IMAGE} \
-    -D run --config /etc/interlock/config.toml
-fi
+  docker build \
+    --build-arg constraint:node==*n${i} \
+    --tag ${INTERLOCK_IMAGE}${i} \
+    interlock/
+
+  rm interlock/config.tmpl2
+
+  if ! network_exists ${NETWORK}${i} ; then
+    echo "Create network ${NETWORK}${i}"
+    docker network create ${NETWORK}${i}
+  fi
+
+  if ! container_exists ${INTERLOCK}${i} ; then
+    echo "Run container ${INTERLOCK}${i}"
+    docker run --detach \
+      --name ${INTERLOCK}${i} \
+      --net ${NETWORK}${i} \
+      --label interlock.ext.service.name=service${i} \
+      --restart unless-stopped \
+      --volumes-from swarm-data:ro \
+      --env constraint:node==*n${i} \
+      ${INTERLOCK_IMAGE}${i} \
+      -D run --config /etc/interlock/config.toml
+  fi
+done

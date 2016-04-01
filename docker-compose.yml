@@ -2,33 +2,67 @@ version: "2"
 
 services:
   # load balancer
-  lb:
-    container_name: interlockexample_lb
+  lb1:
+    container_name: interlockexample_lb1
     image: nginx:1.9
     restart: unless-stopped
     networks:
-      - backend
+      - service1
     ports:
       - "80:80"
     labels:
       - "interlock.ext.name=nginx"
+      - "interlock.ext.service.name=service1"
     environment:
       - constraint:node==*n1
 
-  # app
-  app:
+  # service1
+  service1:
     image: ehazlett/docker-demo
     restart: unless-stopped
     networks:
-      - backend
+      - service1
     expose:
       - 8080
     labels:
-      - "interlock.network=interlockexample_backend"
+      - "interlock.network=interlockexample_service1"
+      - "interlock.ext.service.name=service1"
       - "interlock.hostname=test"
       - "interlock.domain=local"
     depends_on:
-      - lb
+      - lb1
+
+  # load balancer
+  lb2:
+    container_name: interlockexample_lb2
+    image: nginx:1.9
+    restart: unless-stopped
+    networks:
+      - service2
+    ports:
+      - "80:80"
+    labels:
+      - "interlock.ext.name=nginx"
+      - "interlock.ext.service.name=service2"
+    environment:
+      - constraint:node==*n2
+
+  # service2
+  service2:
+    image: ehazlett/docker-demo
+    restart: unless-stopped
+    networks:
+      - service2
+    expose:
+      - 8080
+    labels:
+      - "interlock.network=interlockexample_service2"
+      - "interlock.ext.service.name=service2"
+      - "interlock.hostname=test"
+      - "interlock.domain=local"
+    depends_on:
+      - lb2
 
 networks:
-  backend: {}
+  service1: {}
+  service2: {}

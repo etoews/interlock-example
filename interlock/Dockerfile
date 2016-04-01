@@ -1,4 +1,4 @@
-FROM etoews/interlock:templates
+FROM etoews/interlock:multi
 
 RUN mkdir /etc/interlock
 

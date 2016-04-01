@@ -11,15 +11,16 @@ source ${ROOT}/script/include/util.sh
 
 docker rm -fv $(docker ps -aq -f name=${APP})
 
-
-if image_exists etoews/interlock:templates ; then
-  docker rmi etoews/interlock:templates
+if image_exists etoews/interlock:multi ; then
+  docker rmi etoews/interlock:multi
 fi
 
-if image_exists ${INTERLOCK_IMAGE} ; then
-  docker rmi ${INTERLOCK_IMAGE}
-fi
+for (( i=1; i<=2; i++ )); do
+  if image_exists ${INTERLOCK_IMAGE}${i} ; then
+    docker rmi ${INTERLOCK_IMAGE}${i}
+  fi
 
-if network_exists ${NETWORK} ; then
-  docker network rm ${NETWORK}
-fi
+  if network_exists ${NETWORK}${i} ; then
+    docker network rm ${NETWORK}${i}
+  fi
+done
