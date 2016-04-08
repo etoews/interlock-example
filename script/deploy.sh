@@ -40,3 +40,7 @@ for (( i=1; i<=2; i++ )); do
       -D run --config /etc/interlock/config.toml
   fi
 done
+
+# This is in a bash script because --volumes-from swarm-data:ro ????
+# https://github.com/docker/compose/issues/2958
+# https://github.com/docker/compose/issues/3077
